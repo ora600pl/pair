@@ -2,9 +2,11 @@
 name = "pair"
 version = "0.1.0"
 edition = "2021"
+authors = ["Kamil Stawiarski <kamil@ora-600.pl>"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 object = "0.28.3"
 rayon = "1.5.1"
+clap = { version = "3.0", features = ["derive"] }
