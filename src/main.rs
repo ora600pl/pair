@@ -1,4 +1,3 @@
-use std::env;
 use std::fs;
 use object::Object;
 use object::read::ObjectSymbol;
@@ -6,11 +5,31 @@ use rayon::prelude::*;
 use std::time::SystemTime;
 use std::fs::File;
 use std::io::Write;
+use clap::Parser;
+
 
 struct Symbols {
     name: String,
     b_addr: u64,
     e_addr: u64,
+}
+
+/// Annotate instruction pointers with symbols from binary file
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+	///Binary file to get symbols
+	#[clap(short, long)]
+	binary_file: String,
+	
+	///Output file from pinatrace to annotate 
+	#[clap(short, long)]
+	pinatrace_file: String,
+
+	///Output file to be created with annotations
+	#[clap(short, long)]
+	output_file: String,
+	
 }
 
 fn get_symbols(fname: &str) -> Vec<Symbols> {
@@ -56,11 +75,11 @@ fn annotate(symbols: Vec<Symbols>, pin_trace: Vec<&str>, file_to_create: &str) {
 }
 
 fn main() {
-    let args = env::args().collect::<Vec<String>>();
+    let args = Args::parse();
 
-    let fname = &args[1];
-    let file_to_annotate = &args[2];
-    let file_to_create = &args[3];
+    let fname = &args.binary_file;
+    let file_to_annotate = &args.pinatrace_file;
+    let file_to_create = &args.output_file;
 
     let now = SystemTime::now();
 
